@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   # Root route
   root to: 'items#index' # This sets the root URL of your application to point to the 'index' action of the 'items' controller.
+  resources :items, only: [:index]
   
   # Routes for articles
   get 'articles/index'   # This sets up a route for the 'index' action of the 'articles' controller.
