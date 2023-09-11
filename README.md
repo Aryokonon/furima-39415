@@ -1,48 +1,68 @@
-# README
+ER Diagram
 
-## FURIMA ER Diagram
+![ER Diagram](https://your-image-url.com/your-er-diagram.png)
 
-### USERS
-| Column    | Type    | Options                                   |
-|-----------|---------|-------------------------------------------|
-| User_ID   | Integer | Primary Key, null: false, unique: true    |
-| Username  | String  | null: false                              |
-| Password  | String  | null: false                              |
-| Email     | String  | null: false, unique: true                |
-| Address   | Text    | null: false                              |
-### Association
-- Has many ITEMS (One to Many)
-- Has many ORDERS (One to Many)
-- USERS can exist without ITEMS
-- USERS can exist without ORDERS
-- Logged-in Users can post Items, buy & sell items through Orders
-- Non-logged-in Users cannot perform the above actions.
+### Users
+| Column                  | Type   | Options                                   |
+|-------------------------|--------|-------------------------------------------|
+| user_id                 | Integer| Primary Key, null: false, unique: true    |
+| user_nickname           | String | null: false                               |
+| user_email              | String | null: false, unique: true                 |
+| user_password           | String | null: false                               |
+| user_password_confirmation | String  | null: false                             |
+| user_kanji_name         | String | null: false                               |
+| user_kana_name          | String | null: false                               |
+| user_birthdate          | Date   | null: false                               |
 
-### ITEMS
-| Column   | Type    | Options                              |
-|----------|---------|--------------------------------------|
-| Item_ID  | Integer | Primary Key, null: false             |
-| Name     | String  | null: false                          |
-| Category | String  | null: false                          |
-| Price    | Integer | null: false                          |
-| User_ID  | Integer | Foreign Key, null: false             |
-### Association
-- Belongs to USERS (Many to One)
-- Has many ORDERS (One to Many)
-- ITEMS cannot exist without USERS
-- ITEMS can exist without ORDERS
+**Association:**
+- Has many items (One to Many)
+- Has many orders (One to Many)
+- Users can exist without items
+- Users can exist without orders
+- Logged-in users can post items, buy & sell items through orders
+- Non-logged-in users cannot perform the above actions.
 
-### ORDERS
-| Column          | Type    | Options                                          |
-|-----------------|---------|--------------------------------------------------|
-| Order_ID        | Integer | Primary Key, null: false                         |
-| User_ID         | Integer | Foreign Key (References USERS), null: false     |
-| Item_ID         | Integer | Foreign Key (References ITEMS), null: false     |
-| Shipping_Address| Text    | null: false                                      |
-### Association
-- Belongs to one USERS (Many to One)
-- Belongs to one ITEMS (Many to One)
-- ORDERS cannot exist without USERS
-- ORDERS cannot exist without ITEMS
-- Each Order can have only one Shipping Address (null: false),
-but multiple Orders can share the same Shipping Address (null: false)
+### Items
+| Column          | Type   | Options                              |
+|-----------------|--------|--------------------------------------|
+| user_id         | Integer| Foreign Key, null: false             |
+| item_id         | Integer| Primary Key, null: false             |
+| item_image      | String | null: false                          |
+| item_name       | String | null: false                          |
+| item_description| Text   | null: false                          |
+| item_category   | String | null: false                          |
+| item_price      | Integer| null: false                          |
+
+**Association:**
+- Belongs to users (Many to One)
+- Has many orders (One to Many)
+- Items cannot exist without users
+- Items can exist without orders
+
+### Orders
+| Column     | Type   | Options                                      |
+|------------|--------|----------------------------------------------|
+| user_id    | Integer| Foreign Key (References Users), null: false  |
+| item_id    | Integer| Foreign Key (References Items), null: false  |
+| order_id   | Integer| Primary Key, null: false                     |
+
+**Association:**
+- Belongs to one user (Many to One)
+- Belongs to one item (Many to One)
+- Orders cannot exist without users
+- Orders cannot exist without items
+
+### Shipping Addresses
+| Column             | Type   | Options                                       |
+|--------------------|--------|-----------------------------------------------|
+| order_id           | Integer| Foreign Key (References Orders), null: false  |
+| shipping_id        | Integer| Primary Key, null: false                      |
+| shipping_address   | Text   | null: false                                   |
+| shipping_postal_code| Integer | null: false                                  |
+| shipping_city      | String | null: false                                   |
+| shipping_region    | String | null: false                                   |
+
+**Association:**
+- Belongs to one order (Many to One)
+- Each order can have only one shipping address (null: false),
+  but multiple orders can share the same shipping address (null: false)
