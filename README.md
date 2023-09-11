@@ -1,68 +1,63 @@
-ER Diagram
-
-![ER Diagram](https://your-image-url.com/your-er-diagram.png)
+## ER Diagram
 
 ### Users
-| Column                  | Type   | Options                                   |
-|-------------------------|--------|-------------------------------------------|
-| user_id                 | Integer| Primary Key, null: false, unique: true    |
-| user_nickname           | String | null: false                               |
-| user_email              | String | null: false, unique: true                 |
-| user_password           | String | null: false                               |
-| user_password_confirmation | String  | null: false                             |
-| user_kanji_name         | String | null: false                               |
-| user_kana_name          | String | null: false                               |
-| user_birthdate          | Date   | null: false                               |
+| Column      | Type        | Options                        |
+|-------------|-------------|--------------------------------|
+| nickname    | string      | null: false                    |
+| email       | string      | null: false, unique: true      |
+| encrypted_password | string | null: false                   |
+| kanji_name  | string      | null: false                    |
+| kana_name   | string      | null: false                    |
+| birthdate   | date        | null: false                    |
 
-**Association:**
-- Has many items (One to Many)
-- Has many orders (One to Many)
-- Users can exist without items
-- Users can exist without orders
-- Logged-in users can post items, buy & sell items through orders
-- Non-logged-in users cannot perform the above actions.
+#### Association
+- has_many :items
+- has_many :orders
+
+---
 
 ### Items
-| Column          | Type   | Options                              |
-|-----------------|--------|--------------------------------------|
-| user_id         | Integer| Foreign Key, null: false             |
-| item_id         | Integer| Primary Key, null: false             |
-| item_image      | String | null: false                          |
-| item_name       | String | null: false                          |
-| item_description| Text   | null: false                          |
-| item_category   | String | null: false                          |
-| item_price      | Integer| null: false                          |
+| Column        | Type        | Options                        |
+|---------------|-------------|--------------------------------|
+| user          | references  | null: false, foreign_key: true |
+| name          | string      | null: false                    |
+| description   | text        | null: false                    |
+| category      | string      | null: false                    |
+| condition     | string      | null: false                    |
+| delivery_fee  | string      | null: false                    |
+| shipping_area | string      | null: false                    |
+| shipping_days | string      | null: false                    |
+| price         | integer     | null: false                    |
 
-**Association:**
-- Belongs to users (Many to One)
-- Has many orders (One to Many)
-- Items cannot exist without users
-- Items can exist without orders
+#### Association
+- belongs_to :user
+- has_one :order
+
+---
 
 ### Orders
-| Column     | Type   | Options                                      |
-|------------|--------|----------------------------------------------|
-| user_id    | Integer| Foreign Key (References Users), null: false  |
-| item_id    | Integer| Foreign Key (References Items), null: false  |
-| order_id   | Integer| Primary Key, null: false                     |
+| Column        | Type        | Options                        |
+|---------------|-------------|--------------------------------|
+| user          | references  | null: false, foreign_key: true |
+| item          | references  | null: false, foreign_key: true |
 
-**Association:**
-- Belongs to one user (Many to One)
-- Belongs to one item (Many to One)
-- Orders cannot exist without users
-- Orders cannot exist without items
+#### Association
+- belongs_to :user
+- belongs_to :item
+- has_one :shipping_address
 
-### Shipping Addresses
-| Column             | Type   | Options                                       |
-|--------------------|--------|-----------------------------------------------|
-| order_id           | Integer| Foreign Key (References Orders), null: false  |
-| shipping_id        | Integer| Primary Key, null: false                      |
-| shipping_address   | Text   | null: false                                   |
-| shipping_postal_code| Integer | null: false                                  |
-| shipping_city      | String | null: false                                   |
-| shipping_region    | String | null: false                                   |
+---
 
-**Association:**
-- Belongs to one order (Many to One)
-- Each order can have only one shipping address (null: false),
-  but multiple orders can share the same shipping address (null: false)
+### ShippingAddresses
+| Column        | Type        | Options                        |
+|---------------|-------------|--------------------------------|
+| order         | references  | null: false, foreign_key: true |
+| postal_code   | string      | null: false                    |
+| region        | string      | null: false                    |
+| city          | string      | null: false                    |
+| street        | string      | null: false                    |
+| building_name | string      |                                |
+| phone_number  | string      | null: false                    |
+
+#### Association
+- belongs_to :order
