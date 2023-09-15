@@ -7,4 +7,12 @@ class ApplicationController < ActionController::Base
       username == ENV["BASIC_AUTH_USER"] && password == ENV["BASIC_AUTH_PASSWORD"]
     end
   end
+
+  def after_sign_in_path_for(resource)
+    # Customize the path to redirect users after login
+    # For example, redirect to the user's profile page:
+    user_profile_path(resource)
+  end
+
+
 end

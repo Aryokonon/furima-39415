@@ -1,17 +1,20 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: { registrations: 'registrations' }
 
   # Root route
-  root to: 'items#index' # This sets the root URL of your application to point to the 'index' action of the 'items' controller.
-  resources :items, only: [:index]
-  
-  # Routes for articles
-  get 'articles/index'   # This sets up a route for the 'index' action of the 'articles' controller.
-  get 'articles/new'     # This sets up a route for the 'new' action of the 'articles' controller.
-  resources :articles    # This line generates RESTful routes for the 'articles' resource, including 'index', 'new', 'create', 'edit', 'update', 'show', and 'destroy' actions.
+  root to: 'items#index' # Set the root URL of your application to the 'index' action of the 'items' controller.
+
+  # Routes for items
+  resources :items, only: [:index, :new, :create, :edit, :update, :show, :destroy] do
+    collection do
+      get 'search' # Define a custom search action for items
+    end
+  end
 
   # Routes for orders
-  resources :orders, only: [:create] # This generates routes for the 'create' action of the 'orders' controller, restricting other actions.
+  resources :orders, only: [:create]
 
-  # You can uncomment the following line if you want the root path to point to the 'orders#index' action.
-  # root to: 'orders#index'
+  resources :users do
+    resources :orders, only: [:index, :show, :new, :create]
+  end
 end
