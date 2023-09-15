@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     # Customize the path to redirect users after login
     # For example, redirect to the user's profile page:
-    user_profile_path(resource)
+    root_path # or some other path like dashboard_path
   end
 
 

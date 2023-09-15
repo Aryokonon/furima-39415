@@ -18,7 +18,7 @@ class ItemsController < ApplicationController  # Changed the class name
 
   private
 
-  def item_params  # Changed method name
-    params.require(:item).permit(:title, :text, :genre_id)  # Changed required parameter
+  def item_params
+    params.require(:item).permit(:name, :description, :category_id, :condition_id, :delivery_fee_id, :prefecture_id, :shipping_day_id, :price)
   end
 end
