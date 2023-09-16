@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users
-  
-  get 'profile', to: 'profiles#show', as: 'user_profile'
-
   # Root route
   root to: 'items#index' # Set the root URL of your application to the 'index' action of the 'items' controller.
+
+  get 'profile', to: 'profiles#show', as: 'user_profile'
+  get '/login', to: 'sessions#new'
 
   # Routes for items
   resources :items, only: [:index, :new, :create, :edit, :update, :show, :destroy] do

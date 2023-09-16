@@ -7,7 +7,6 @@ class User < ApplicationRecord
   has_many :items, dependent: :destroy
   has_many :orders, dependent: :destroy
 
-  attr_accessor :nickname, :birth_date
 
   validates :nickname, presence: true
   validates :last_name, presence: true, format: { with: /\A[ぁ-んァ-ヶ一-龥々]+\z/ }
