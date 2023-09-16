@@ -8,6 +8,7 @@ class ItemsController < ApplicationController  # Changed the class name
   end
 
   def create
+    @item = current_user.items.build(item_params)
     @item = Item.new(item_params)  # Changed variable name and model name
     if @item.save  # Changed variable name
       redirect_to root_path

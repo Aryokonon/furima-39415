@@ -5,6 +5,7 @@ class OrdersController < ApplicationController
   end
 
   def create
+      @order = current_user.orders.build(item_id: params[:item_id])
     @order = Order.new(order_params)
     if @order.valid?
       pay_item
