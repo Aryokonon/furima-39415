@@ -1,11 +1,9 @@
-require 'faker'
-
 FactoryBot.define do
   factory :user do
-    nickname { Faker::Internet.unique.username(specifier: 6) } # Generate a random 6-character nickname
-    email { Faker::Internet.unique.email }
+    nickname { 'example_user' }
+    email { 'user@example.com' }
     password { 'password123' }
-    last_name { '山田' }
+    password_confirmation { 'password123' } # Add this line
     first_name { '太郎' }
     last_name_kana { 'ヤマダ' }
     first_name_kana { 'タロウ' }

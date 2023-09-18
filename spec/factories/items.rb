@@ -1,4 +1,4 @@
-# LATER ON
+# COMMENTED OUTED
 
 FactoryBot.define do
   factory :item do
@@ -8,8 +8,8 @@ FactoryBot.define do
     category_id { 1 } # Replace with the appropriate category ID
     condition_id { 1 } # Replace with the appropriate condition ID
     delivery_fee_id { 1 } # Replace with the appropriate delivery fee ID
-    prefecture_id { 1 } # Replace with the appropriate prefecture ID
-    shipping_day_id { 1 } # Replace with the appropriate shipping day ID
-    price { 1000 }
+#    prefecture_id { 1 } # Replace with the appropriate prefecture ID
+#    shipping_day_id { 1 } # Replace with the appropriate shipping day ID
+#    price { 1000 }
   end
 end
