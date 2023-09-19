@@ -1,12 +1,14 @@
-<div class="form-wrap">
-  <div class='form-header'>
-    <h1 class='form-header-text'>
-      会員情報入力
-    </h1>
-  </div>
+<%= form_with model: @user, url: user_registration_path, class: 'registration-main', local: true do |f| %>
+  <div class='form-wrap'>
+    <div class="form-wrap">
+      <div class='form-header'>
+        <h1 class='form-header-text'>
+          会員情報入力
+        </h1>
+      </div>
 
-  <%# エラーメッセージの表示領域を追加 %>
-  <%= render "shared/error_messages", model: @user %>
+      <%# エラーメッセージの表示領域を追加 %>
+      <%= render "shared/error_messages", model: @user %>
 
   <div class="form-group">
     <div class='form-text-wrap'>
