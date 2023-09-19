@@ -60,6 +60,7 @@ group :development do
 end
 
 gem 'active_hash'
+
 gem 'payjp'
 
 group :production do
