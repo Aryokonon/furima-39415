@@ -1,26 +1,36 @@
-# COMMENTED OUTED
-
-# Changed the class name
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
 
   def index
-    @items = Item.all 
+    @items = Item.order("created_at DESC")
   end
-
-  # Define other actions (e.g., show, new, create, edit, update, destroy) as needed
 
   def new
     @item = Item.new
   end
 
   def create
+    debugger # byebug
     @item = current_user.items.build(item_params)
-    if @item.save # Changed variable name
-      redirect_to root_path
+    if @item.save 
+      flash[:notice] = "Item was successfully created."
+      redirect_to @item
     else
+      flash.now[:alert] = "There was an error creating the item. Please try again."
       render :new
     end
+  end
+  
+  def edit
+  end
+
+  def update
+  end
+
+  def destroy
+  end
+
+  def show
   end
 
   private
