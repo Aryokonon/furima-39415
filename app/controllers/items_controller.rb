@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
       render 'new'
     end
   end
-  
+
   def edit
   end
 
@@ -59,7 +59,7 @@ class ItemsController < ApplicationController
 
   def remove_duplicate_errors(item)
     # Iterate through the errors and remove duplicates
-    item.errors.messages.each do |field, messages|
+    item.errors.messages.each do |field, _messages|
       item.errors[field].uniq!
     end
   end
