@@ -12,7 +12,7 @@ Rails.application.routes.draw do
 
   resources :orders, only: [:create]
 
-  resources :users do
+  resources :users, constraints: { id: /\d+/ } do
     resources :orders, only: [:index, :show, :new, :create]
   end
 end
