@@ -2,10 +2,6 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :find_item, only: [:edit, :update, :show]
 
-  def index
-    @items = Item.order('created_at DESC')
-  end
-
   def new
     @item = Item.new
   end
@@ -21,34 +17,38 @@ class ItemsController < ApplicationController
     end
   end
 
-  def edit
-  end
+  #  def index
+  #    #  @items = Item.order('created_at DESC')
+  #    end
 
-  def update
-    if @item.update(item_params)
-      flash[:notice] = 'Item was successfully updated.'
-      redirect_to @item
-    else
-      flash.now[:alert] = 'There was an error updating the item.'
-      render :edit
-    end
-  end
+  #  def edit
+  #  end
 
-  def destroy
-    @item = Item.find(params[:id])
-    @item.destroy
-    flash[:notice] = 'Item was successfully deleted.'
-    redirect_to items_path
-  end
+  #  def update
+  #    if @item.update(item_params)
+  #      flash[:notice] = 'Item was successfully updated.'
+  #     redirect_to @item
+  #    else
+  #      flash.now[:alert] = 'There was an error updating the item.'
+  #      render :edit
+  #    end
+  #  end
 
-  def show
-  end
+  #  def destroy
+  #    @item = Item.find(params[:id])
+  #    @item.destroy
+  #    flash[:notice] = 'Item was successfully deleted.'
+  #    redirect_to items_path
+  #  end
+
+  #  def show
+  #  end
 
   private
 
-  def find_item
-    @item = Item.find(params[:id])
-  end
+  #  def find_item
+  #    @item = Item.find(params[:id])
+  #  end
 
   def item_params
     params.require(:item).permit(

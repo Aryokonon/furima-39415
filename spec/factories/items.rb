@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :item do
-    # user # This sets up the association with a user automatically, assuming you have a user factory defined.
+    user { association :user } # This sets up the association with a user automatically
     name { 'Example Item' }
     description { 'This is a test item.' }
     category_id { 2 } # Replace with the appropriate category ID

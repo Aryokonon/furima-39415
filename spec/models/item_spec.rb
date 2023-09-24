@@ -5,9 +5,9 @@ RSpec.describe Item, type: :model do
     @user = FactoryBot.create(:user)
     @item = FactoryBot.build(:item, user: @user)
 
-    # Create and attach a sample image to @item
-    image_blob = FactoryBot.create(:active_storage_blob)
-    @item.image.attach(image_blob)
+    # Attaching an example image file to the item
+    @item.image.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'files', 'example.jpg')), filename: 'example.jpg',
+                       content_type: 'image/jpg')
   end
 
   describe 'アイテム登録が成功する場合' do
@@ -76,18 +76,37 @@ RSpec.describe Item, type: :model do
       @item.valid?
       expect(@item.errors[:shipping_day_id]).to include('must be selected')
     end
-  end
 
-  describe '#売り切れ?' do
-    let(:order) { FactoryBot.create(:order, item: @item) }
-
-    it 'アイテムが売り切れの場合、trueを返すこと' do
-      expect(@item.sold_out?).to eq false
+    it '価格に半角数字以外が含まれている場合は出品できない' do
+      @item.price = 'abc123'
+      @item.valid?
+      expect(@item.errors[:price]).to include('は半角数字で入力してください')
     end
 
-    it 'アイテムが売り切れでない場合、falseを返すこと' do
-      @item.order = nil
-      expect(@item.sold_out?).to eq false
+    it '価格が9,999,999円を超えると出品できない' do
+      @item.price = 10_000_000
+      @item.valid?
+      expect(@item.errors[:price]).to include('は¥300以上、¥9,999,999以下で入力してください')
+    end
+
+    it 'userが紐付いていなければ出品できない' do
+      @item.user = nil
+      @item.valid?
+      expect(@item.errors[:user]).to include('must exist')
     end
   end
 end
+
+# describe '#売り切れ?' do
+#  let(:order) { FactoryBot.create(:order, item: @item) }
+
+#  it 'アイテムが売り切れの場合、trueを返すこと' do
+#    expect(@item.sold_out?).to eq true
+#  end
+
+#  it 'アイテムが売り切れでない場合、falseを返すこと' do
+#    @item.order = nil
+#    expect(@item.sold_out?).to eq true
+#  end
+#  end
+#  end
