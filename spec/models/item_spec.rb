@@ -1,69 +1,107 @@
-RSpec.describe 'Items', type: :request do
-  describe 'GET /index' do
-    context 'ログインユーザーの場合' do
-      before do
-        @user = FactoryBot.create(:user)
-        sign_in @user
-      end
+require 'rails_helper'
 
-      it '/indexにアクセス可能' do
-        get '/items/index'
-        expect(response).to have_http_status(:ok)
-      end
+RSpec.describe Item, type: :model do
+  describe 'Associations' do
+    it { is_expected.to belong_to(:user) }
+    it { is_expected.to have_one(:order) }
+    it { is_expected.to belong_to(:category) }
+    it { is_expected.to belong_to(:condition) }
+    it { is_expected.to belong_to(:delivery_fee) }
+    it { is_expected.to belong_to(:prefecture) }
+    it { is_expected.to belong_to(:shipping_day) }
+  end
 
-      it '商品出品ページに遷移可能' do
-        get '/items/new'
-        expect(response).to have_http_status(:ok)
-      end
+  describe 'Validations' do
+    subject { FactoryBot.build(:item) }
 
-      # ログインユーザーに対する他のテスト
+    it { is_expected.to validate_presence_of(:name).with_message('を入力してください') }
+    it { is_expected.to validate_presence_of(:description).with_message('を入力してください') }
+    it { is_expected.to validate_presence_of(:price).with_message('を入力してください') }
+
+    it 'is invalid without an image' do
+      subject.image = nil
+      is_expected.to_not be_valid
     end
 
-    context 'ログアウトユーザーの場合' do
-      it '/indexへのアクセスがログインページへリダイレクトされる' do
-        get '/items/index'
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      it '商品出品ページへのアクセスがログインページへリダイレクトされる' do
-        get '/items/new'
-        expect(response).to redirect_to(new_user_session_path)
-      end
-
-      # ログアウトユーザーに対する他のテスト
+    it { is_expected.to validate_numericality_of(:price).only_integer }
+    it do
+      is_expected.to validate_inclusion_of(:price)
+        .in_range(300..9_999_999)
+        .with_message('は設定範囲外です')
     end
 
-    context '有効な商品データを送信した場合' do
-      before do
-        @user = FactoryBot.create(:user)
-        sign_in @user
-      end
-
-      it '商品情報がデータベースに保存され、トップページにリダイレクトされる' do
-        item_attributes = FactoryBot.attributes_for(:item)
-        expect do
-          post '/items', params: { item: item_attributes }
-        end.to change(Item, :count).by(1)
-
-        expect(response).to redirect_to(root_path)
-      end
-
-      # 有効なデータ送信に対する他のテスト
+    it 'is invalid with incorrect category_id value' do
+      subject.category_id = 1
+      is_expected.to_not be_valid
+      expect(subject.errors[:category_id]).to include('を選択してください')
     end
 
-    context '無効な商品データを送信した場合' do
-      before do
-        @user = FactoryBot.create(:user)
-        sign_in @user
+    # Include other similar tests for condition_id, delivery_fee_id, prefecture_id, shipping_day_id
+  end
+
+  describe '#sold_out?' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:item) { FactoryBot.create(:item, user: user) }
+    let(:order) { FactoryBot.create(:order, item: item) }
+
+    it 'returns true when the item is sold out' do
+      expect(item.sold_out?).to eq true
+    end
+
+    it 'returns false when the item is not sold out' do
+      item.order = nil
+      expect(item.sold_out?).to eq false
+    end
+  end
+
+  describe 'Item Listing' do
+    before do
+      user = FactoryBot.create(:user)
+      @item = FactoryBot.build(:item, user: user)
+    end
+
+    context 'when item can be listed' do
+      it 'has all the required information' do
+        expect(@item).to be_valid
+      end
+    end
+
+    context 'when item cannot be listed' do
+      it 'does not have attached image' do
+        @item.image = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include('画像が必須です')
       end
 
-      it '商品情報がデータベースに保存されず、新規作成テンプレートがレンダリングされる' do
-        post '/items', params: { item: FactoryBot.attributes_for(:item, name: nil) }
-        expect(response).to render_template(:new)
-        expect(assigns(:item).name).to be_nil
+      it 'has an empty name' do
+        @item.name = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include('商品名が必須です')
       end
 
-      # 無効なデータ送信に対する他のテスト
+      it 'has an empty description' do
+        @item.description = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include('商品の説明が必須です')
+      end
+
+      it 'has an incorrect category_id value' do
+        @item.category_id = 1
+        @item.valid?
+        expect(@item.errors[:category_id]).to include('を選択してください')
+      end
+
+      it 'has an empty price' do
+        @item.price = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include('価格が必須です')
+      end
+
+      it 'has a price less than ¥300' do
+        @item.price = 299
+        @item.valid?
+        expect(@item.errors.full_messages).to include('価格は¥300〜¥9,999,999の間で入力してください')
+      end
     end
   end
 end
