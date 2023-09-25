@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
     params.require(:item).permit(
       :name, :description, :category_id, :condition_id, :delivery_fee_id,
       :prefecture_id, :shipping_day_id, :price, :image
-    )
+    ).merge(user_id: current_user.id)
   end
 
   def remove_duplicate_errors(item)
