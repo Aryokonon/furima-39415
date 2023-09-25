@@ -4,4 +4,9 @@ class UsersController < ApplicationController
     #    user = User.find(params[:id])
     redirect_to root_path
   end
+
+  def show
+    @user = User.find(params[:id])
+    # Additional logic to display the user's profile
+  end
 end

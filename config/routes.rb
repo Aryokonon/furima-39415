@@ -1,22 +1,18 @@
 Rails.application.routes.draw do
   devise_for :users
-  # Root route
-  root to: 'items#index' # Set the root URL of your application to the 'index' action of the 'items' controller.
+  root to: 'items#index'
 
   get 'profile', to: 'profiles#show', as: 'user_profile'
-  get '/login', to: 'sessions#new'
 
-  # Routes for items
   resources :items, only: [:index, :new, :create, :edit, :update, :show, :destroy] do
     collection do
-      get 'search' # Define a custom search action for items
+      get 'search'
     end
   end
 
-  # Routes for orders
   resources :orders, only: [:create]
 
-  resources :users do
+  resources :users, constraints: { id: /\d+/ } do
     resources :orders, only: [:index, :show, :new, :create]
   end
 end
