@@ -18,11 +18,11 @@ class ItemsController < ApplicationController
   end
 
   def index
-    #    #  @items = Item.order('created_at DESC')
+    @items = Item.all.order(created_at: :desc)
   end
 
   #  def edit
-  #  end
+  #  end        
 
   #  def update
   #    if @item.update(item_params)
