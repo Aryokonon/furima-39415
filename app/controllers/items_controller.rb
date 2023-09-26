@@ -41,14 +41,14 @@ class ItemsController < ApplicationController
   #    redirect_to items_path
   #  end
 
-  #  def show
-  #  end
+  def show
+  end
 
   private
 
-  #  def find_item
-  #    @item = Item.find(params[:id])
-  #  end
+  def find_item
+    @item = Item.find(params[:id])
+  end
 
   def item_params
     params.require(:item).permit(

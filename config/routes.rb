@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   end
 
   resources :orders, only: [:create]
+  get '/orders/new/:item_id', to: 'orders#new', as: 'new_order'
+
 
   resources :users, constraints: { id: /\d+/ } do
     resources :orders, only: [:index, :show, :new, :create]

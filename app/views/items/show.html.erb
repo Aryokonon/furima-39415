@@ -1,4 +1,4 @@
-<!---
+
 
 <%= render "shared/header" %>
 
@@ -16,7 +16,7 @@
       <% end %>
     </div>
 
-<% if @item.sold_out? %>  
+<% if @item.sold_out? %>
   <div class="sold-out">
     <span>Sold Out!!</span>
   </div>
@@ -34,20 +34,23 @@
     </div>
 
     <%# ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分けましょう %>
-    <% if user_signed_in? && current_user == @item.user %>
-      <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
-      <p class="or-text">or</p>
-      <%= link_to "削除", @item, method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
-    <% else %>
-      <%# 商品が売れていない場合はこちらを表示しましょう %>
-      <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
+<% if user_signed_in? && current_user == @item.user %>
+  <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
+  <p class="or-text">or</p>
+  <%= link_to "削除", @item, method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
+<% elsif !@item.sold_out? %>
+       <%# 商品が売れていない場合はこちらを表示しましょう %>
+  <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
       <%# //商品が売れていない場合はこちらを表示しましょう %>
-    <% end %>
+<% else %>
+  <!-- Display a message or a link to log in/register -->
+  <%= link_to "ログインして購入する", new_user_session_path, class: "item-red-btn" %>
+<% end %>
 
     <%# //ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分けましょう %>
 
     <div class="item-explain-box">
-      <span><%= "商品説明" %></span>
+      <span><%= @item.description %></span>
     </div>
     <table class="detail-table">
       <tbody>
@@ -88,8 +91,33 @@
       </div>
     </div>
   </div>
+  <%# /商品の概要 %>
+
+  <div class="comment-box">
+    <form>
+      <textarea class="comment-text"></textarea>
+      <p class="comment-warn">
+        相手のことを考え丁寧なコメントを心がけましょう。
+        <br>
+        不快な言葉遣いなどは利用制限や退会処分となることがあります。
+      </p>
+      <button type="submit" class="comment-btn">
+        <%= image_tag "comment.png" ,class:"comment-flag-icon" ,width:"20",height:"25"%>
+        <span>コメントする<span>
+      </button>
+    </form>
+  </div>
+  <div class="links">
+    <a href="#" class="change-item-btn">
+      ＜ 前の商品
+    </a>
+    <a href="#" class="change-item-btn">
+      後ろの商品 ＞
+    </a>
+  </div>
+  <%# 詳細ページで表示されている商品のカテゴリー名を表示しましょう %>
+  <a href="#" class="another-item"><%= "商品のカテゴリー名" %>をもっと見る</a>
+  <%# //詳細ページで表示されている商品のカテゴリー名を表示しましょう %>
 </div>
 
 <%= render "shared/footer" %>
-
---->
