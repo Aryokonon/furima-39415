@@ -17,4 +17,7 @@ Rails.application.routes.draw do
   resources :users, constraints: { id: /\d+/ } do
     resources :orders, only: [:index, :show, :new, :create]
   end
+
+  patch '/items/:id', to: 'items#update', as: 'update_item'
+
 end

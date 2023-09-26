@@ -21,18 +21,23 @@ class ItemsController < ApplicationController
     @items = Item.all.order(created_at: :desc)
   end
 
-  #  def edit
-  #  end
+  def edit
+    @item = Item.find(params[:id])
+    unless current_user == @item.user
+      redirect_to root_path, alert: '他のユーザーの商品は編集できません。'
+      return
+    end
+  end
 
-  #  def update
-  #    if @item.update(item_params)
-  #      flash[:notice] = 'Item was successfully updated.'
-  #     redirect_to @item
-  #    else
-  #      flash.now[:alert] = 'There was an error updating the item.'
-  #      render :edit
-  #    end
-  #  end
+  def update
+    if @item.update(item_params)
+      flash[:notice] = 'Item was successfully updated.'
+      redirect_to @item
+    else
+      flash.now[:alert] = 'There was an error updating the item.'
+      render :edit
+    end
+  end
 
   #  def destroy
   #    @item = Item.find(params[:id])

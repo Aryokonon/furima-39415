@@ -36,10 +36,22 @@
     <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
     <p class="or-text">or</p>
     <%= link_to "削除", @item, method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
-  <% elsif !@item.sold_out? %>
-    <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
+<%#   <% elsif !@item.sold_out? %>
+<%#    <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
   <% end %>
 <% end %>
+
+<%# <% if user_signed_in? %>
+  <%# <% if current_user == @item.user %>
+    <%# <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
+    <%# <p class="or-text">or</p>
+    <%= link_to "削除", @item, method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
+  <%# <% elsif !@item.sold_out? %>
+    <%# <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
+  <%# <% end %>
+<%# <% else %>
+  <%# <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
+<%# <% end %> 
 
 
     <div class="item-explain-box">
