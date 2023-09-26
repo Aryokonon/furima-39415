@@ -1,6 +1,5 @@
 <%= render "shared/header" %>
 <div class='main'>
-
   <!-- 画面上部の「人生を変えるフリマアプリ」帯部分 -->
   <div class='title-contents'>
     <h2 class='service-title'>
@@ -17,7 +16,7 @@
       <%= link_to image_tag("google-play.png", class:"google-btn"), "#" %>
     </div>
   </div>
-  <!-- /画面上部の「人生を変えるフリマアプリ」帯部分  -->
+  <!-- /画面上部の「人生を変えるフリマアプリ」帯部分 -->
 
   <!-- FURIMAが選ばれる3つの理由部分 -->
   <div class='select-reason-contents'>
@@ -128,10 +127,10 @@
     </div>
     <ul class='item-lists'>
       <!-- Check if @items is not empty -->
- --     <% if @items.present? %>
+      <% if @items.present? %>
         <% @items.each do |item| %>
           <li class='list'>
-            <%= link_to item_path(item) do %> 
+            <%= link_to item_path(item) do %>
               <div class='item-img-content'>
                 <!-- Display the item image if available, else show a default image -->
                 <% if item.image.attached? %>
@@ -140,35 +139,36 @@
                   <%= image_tag "item-sample.png", class: "item-img" %>
                 <% end %>
 
-                <% if item.sold_out? %> 
-                  <div class='sold-out'>
-                    <span>Sold Out!!</span>
-                  </div>
-                <% end %>
+<%#   <% if item.sold_out? %>
+<%#         <div class='sold-out'>
+            <%#   <span>Sold Out!!</span>
+          </div>
+<%#  <% end %>
+
               </div>
               <!-- Display item name, price, and delivery fee -->
-<div class='item-info'>
-  <h3 class='item-name'>
-    <%= item.name %>
-  </h3>
-  <div class='item-price'>
-    <span><%= item.price %>円<br>
-    <% delivery_fee = DeliveryFee.find(item.delivery_fee_id) %>
-    <%= delivery_fee.name %></span>
-    <div class='star-btn'>
-      <%= image_tag "star.png", class: "star-icon" %>
-      <span class='star-count'>0</span>
-    </div>
-  </div>
-</div>
+              <div class='item-info'>
+                <h3 class='item-name'>
+                  <%= item.name %>
+                </h3>
+                <div class='item-price'>
+                  <span><%= item.price %>円<br>
+                  <% delivery_fee = DeliveryFee.find(item.delivery_fee_id) %>
+                  <%= delivery_fee.name %></span>
+                  <div class='star-btn'>
+                    <%= image_tag "star.png", class: "star-icon" %>
+                    <span class='star-count'>0</span>
+                  </div>
+                </div>
+              </div>
             <% end %>
           </li>
         <% end %>
-      <!-- If @items is empty, display dummy items -->
-      <% else %>
+      <% else %> 
+        <!-- If @items is empty, display dummy items -->
         <!-- Display a placeholder item if there are no items -->
         <li class='list'>
-          <%= link_to '#' do %>
+          <%= link_to new_item_path do %> 
             <!-- Display a placeholder image and text -->
             <div class='item-img-content'>
               <%= image_tag "https://tech-master.s3.amazonaws.com/uploads/curriculums/images/Rails1-4/sample.jpg", class: "item-img" %>

@@ -16,13 +16,11 @@
       <% end %>
     </div>
 
-<% if @item.sold_out? %>
-  <div class="sold-out">
-    <span>Sold Out!!</span>
-  </div>
-<% end %>
-
-<%# //商品が売れている場合は、sold outを表示しましょう %>
+<%#   <% if item.sold_out? %>
+<%#         <div class='sold-out'>
+            <%#   <span>Sold Out!!</span>
+          </div>
+<%#  <% end %>
 
     <div class="item-price-box">
       <span class="item-price">
@@ -112,9 +110,7 @@
       後ろの商品 ＞
     </a>
   </div>
-  <%# 詳細ページで表示されている商品のカテゴリー名を表示しましょう %>
-  <a href="#" class="another-item"><%= "商品のカテゴリー名" %>をもっと見る</a>
-  <%# //詳細ページで表示されている商品のカテゴリー名を表示しましょう %>
+  <a href="#" class="another-item"><%= @item.category.name %>をもっと見る</a>
 </div>
 
 <%= render "shared/footer" %>
