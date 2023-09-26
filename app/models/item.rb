@@ -1,7 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :user
   has_one_attached :image
-  # has_one :order
+  #  has_one :order
 
   # Image presence validation
   validates :image, presence: { message: "can't be blank" }
@@ -39,6 +39,6 @@ class Item < ApplicationRecord
                     }
 
   #  def sold_out?
-  #    # order.present? || sold
+  #    order.present?
   #  end
 end
