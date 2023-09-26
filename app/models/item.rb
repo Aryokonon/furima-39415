@@ -38,7 +38,7 @@ class Item < ApplicationRecord
                       message: 'は¥300以上、¥9,999,999以下で入力してください'
                     }
 
-  def sold_out?
-    # order.present? || sold
-  end
+  #  def sold_out?
+  #    # order.present? || sold
+  #  end
 end
