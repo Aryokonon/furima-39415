@@ -34,17 +34,14 @@
     </div>
 
     <%# ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分けましょう %>
-<% if user_signed_in? && current_user == @item.user %>
-  <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
-  <p class="or-text">or</p>
-  <%= link_to "削除", @item, method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
-<% elsif !@item.sold_out? %>
-       <%# 商品が売れていない場合はこちらを表示しましょう %>
-  <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
-      <%# //商品が売れていない場合はこちらを表示しましょう %>
-<% else %>
-  <!-- Display a message or a link to log in/register -->
-  <%= link_to "ログインして購入する", new_user_session_path, class: "item-red-btn" %>
+<% if user_signed_in? %>
+  <% if current_user == @item.user %>
+    <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
+    <p class="or-text">or</p>
+    <%= link_to "削除", @item, method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
+  <% elsif !@item.sold_out? %>
+    <%= link_to "購入画面に進む", new_order_path(item_id: @item.id), class: "item-red-btn" %>
+  <% end %>
 <% end %>
 
     <%# //ログインしているユーザーと出品しているユーザーが、同一人物の場合と同一人物ではない場合で、処理を分けましょう %>
