@@ -22,8 +22,6 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:id])
-
     # Check if the user is logged in
     if current_user.nil?
       redirect_to new_user_session_path, alert: 'ログインが必要です。'
