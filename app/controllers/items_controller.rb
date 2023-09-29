@@ -21,10 +21,13 @@ class ItemsController < ApplicationController
     @items = Item.all.order(created_at: :desc)
   end
 
-    # Check if the user is the owner of the item and the item is not sold out
-  #  return if current_user == @item.user  # && !@item.sold_out?
-
-  #  redirect_to root_path, alert: '他のユーザーの商品は編集できません。'
+  def edit
+    if current_user.nil? || current_user != @item.user
+      redirect_to root_path, alert: '他のユーザーの商品は編集できません.'
+    elsif @item.sold_out?
+      redirect_to root_path, alert: '売却済みの商品は編集できません.'
+      return if current_user == @item.user # && !@item.sold_out?
+    end
   end
 
   def update
@@ -36,7 +39,6 @@ class ItemsController < ApplicationController
       render :edit
     end
   end
-
   #  def destroy
   #    @item = Item.find(params[:id])
   #    @item.destroy
@@ -66,3 +68,4 @@ class ItemsController < ApplicationController
       item.errors[field].uniq!
     end
   end
+end
