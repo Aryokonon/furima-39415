@@ -21,18 +21,10 @@ class ItemsController < ApplicationController
     @items = Item.all.order(created_at: :desc)
   end
 
-  def edit
-    # Check if the user is logged in
-    if current_user.nil?
-      redirect_to new_user_session_path, alert: 'ログインが必要です。'
-      return
-    end
-
     # Check if the user is the owner of the item and the item is not sold out
-    return if current_user == @item.user && !@item.sold_out?
+  #  return if current_user == @item.user  # && !@item.sold_out?
 
-    redirect_to root_path, alert: '他のユーザーの商品は編集できません。'
-    nil
+  #  redirect_to root_path, alert: '他のユーザーの商品は編集できません。'
   end
 
   def update
@@ -74,4 +66,3 @@ class ItemsController < ApplicationController
       item.errors[field].uniq!
     end
   end
-end
