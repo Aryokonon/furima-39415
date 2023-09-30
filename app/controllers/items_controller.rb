@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
-  before_action :find_item, only: [:edit, :update, :show]
+  before_action :find_item, only: [:edit, :update, :show, :destroy]
 
   def new
     @item = Item.new
@@ -36,8 +36,6 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    @item = Item.find(params[:id])
-
     if @item.user == current_user
       @item.destroy
       flash[:notice] = 'Item was successfully deleted.'
