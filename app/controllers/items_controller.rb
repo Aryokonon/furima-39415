@@ -22,23 +22,19 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    if current_user.nil? || current_user != @item.user
-      redirect_to root_path, alert: '他のユーザーの商品は編集できません.'
-    elsif @item.sold_out?
-      redirect_to root_path, alert: '売却済みの商品は編集できません.'
-      return if current_user == @item.user # && !@item.sold_out?
-    end
+    redirect_to root_path, alert: '他のユーザーの商品は編集できません.' if current_user != @item.user
   end
 
   def update
     if @item.update(item_params)
       flash[:notice] = 'Item was successfully updated.'
-      redirect_to @item
+      redirect_to item_path(@item)  # Use item_path with @item
     else
       flash.now[:alert] = 'There was an error updating the item.'
       render :edit
     end
   end
+
   #  def destroy
   #    @item = Item.find(params[:id])
   #    @item.destroy
