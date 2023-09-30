@@ -35,14 +35,17 @@ class ItemsController < ApplicationController
     end
   end
 
-  #  def destroy
-  #    @item = Item.find(params[:id])
-  #    @item.destroy
-  #    flash[:notice] = 'Item was successfully deleted.'
-  #    redirect_to items_path
-  #  end
+  def destroy
+    @item = Item.find(params[:id])
 
-  def show
+    if @item.user == current_user
+      @item.destroy
+      flash[:notice] = 'Item was successfully deleted.'
+    else
+      flash[:alert] = 'You are not authorized to delete this item.'
+    end
+
+    redirect_to root_path
   end
 
   private
