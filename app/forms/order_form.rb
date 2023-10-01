@@ -3,7 +3,7 @@
 
 class OrderForm
   include ActiveModel::Model
-  attr_accessor :price, :token, :postal_code, :city, :street, :phone_number, :prefecture_id
+  attr_accessor :price, :token, :postal_code, :city, :street, :phone_number, :prefecture_id, :building_name
 
   with_options presence: true do
     validates :price, presence: true, numericality: {
