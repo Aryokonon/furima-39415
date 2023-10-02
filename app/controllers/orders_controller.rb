@@ -1,6 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!, except: :index
-  
+
   def new
     @item = Item.find(params[:item_id])
     @order_form = OrderForm.new
@@ -13,35 +13,36 @@ class OrdersController < ApplicationController
     @items = Item.all
   end
 
-def create
-  @order_form = OrderForm.new(order_form_params)
-  if @order_form.valid?
-    ActiveRecord::Base.transaction do
-      @item = Item.find(params[:order_form][:item_id])
+  def create
+    @order_form = OrderForm.new(order_form_params)
 
-      # Handle payment
-      pay_item
+    if @order_form.valid?
+      @item = Item.find(@order_form.item_id)
+      ActiveRecord::Base.transaction do
 
-      # Save order and shipping address
-      save_order_and_shipping_address
+        # Handle payment
+        pay_item
 
-      # Redirect to a success page or show a success message
-      redirect_to root_path, notice: 'Order was successfully created.'
-    rescue StandardError => e
-      # Handle any errors that might occur during payment or database insertion
-      flash.now[:alert] = 'There was an error processing your order.'
+        # Save order and shipping address
+        save_order_and_shipping_address
+
+        # Redirect to a success page or show a success message
+        redirect_to root_path, notice: 'Order was successfully created.'
+      rescue StandardError => e
+        # Handle any errors that might occur during payment or database insertion
+        flash.now[:alert] = 'There was an error processing your order.'
+        render 'index'
+      end
+    else
       render 'index'
     end
-  else
-    render 'index'
   end
-end
 
   private
 
   def order_form_params
     params.require(:order_form).permit(:price, :token, :postal_code, :building_name, :city, :street, :phone_number,
-                                       :prefecture_id)
+                                       :prefecture_id, :item_id)
   end
 
   def pay_item

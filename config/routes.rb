@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :items, only: [:index, :new, :create, :edit, :update, :show, :destroy] do
     collection do
       get 'search'
+      resources :orders, only: [:new, :create]
     end
   end
 
@@ -25,4 +26,4 @@ Rails.application.routes.draw do
 
   # Route for updating an item
   patch '/items/:id', to: 'items#update', as: 'update_item'
-end
+end 
