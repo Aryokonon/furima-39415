@@ -6,21 +6,26 @@
       購入内容の確認
     </h1>
     
-    <% @items.each do |item| %>
-      <%# 購入内容の表示 %>
+
+    <% if @item %>
+      <%# If @item exists, display item details %>
       <div class='buy-item-info'>
-        <%= image_tag item.image, class: 'buy-item-img' %>
+        <%= image_tag @item.image, class: 'buy-item-img' %>
         <div class='buy-item-right-content'>
           <h2 class='buy-item-text'>
-            <%= item.name %>
+            <%= @item.name %>
           </h2>
           <div class='buy-item-price'>
-            <p class='item-price-text'>¥<%= item.price %></p>
-            <p class='item-price-sub-text'><%= item.delivery_fee.name %></p>
+            <p class='item-price-text'>¥<%= @item.price %></p>
+            <p class='item-price-sub-text'><%= @item.delivery_fee.name %></p>
           </div>
         </div>
       </div>
+    <% else %>
+      <%# Handle the case where @item is nil, e.g., display an error message or redirect %>
+      <p>No item found with the specified ID</p>
     <% end %>
+
 
     <%# 支払額の表示 %>
     <div class='item-payment'>
@@ -33,7 +38,7 @@
     </div>
     <%# /支払額の表示 %>
 
-    <%= form_with model: @order_form, url: orders_path, method: :post, id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
+    <%= form_with model: @order_form, url: orders_with_id_index_path, method: :post, id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
       <!-- カード情報の入力 -->
       <div class='credit-card-form'>
         <h1 class='info-input-haedline'>
@@ -125,8 +130,9 @@
       </div>
       <!-- /配送先の入力 -->
 
+  <%= f.hidden_field :item_id, value: @item.id %>
       <div class='buy-btn'>
-        <%= f.submit "購入" ,class:"buy-red-btn", id:"button" %>
+    <%= f.submit "購入" ,class:"buy-red-btn", id:"button" %>
       </div>
     <% end %>
   </div>

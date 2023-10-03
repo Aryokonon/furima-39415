@@ -2,39 +2,52 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!, except: :index
 
   def new
+    item_id = params[:item_id]
+    puts "Item ID: #{item_id}"
+    item = Item.find_by(id: params[:item_id])
     @item = Item.find(params[:item_id])
-    @order_form = OrderForm.new
+    @order_form = OrderForm.new(user: current_user, item: @item)
     @items = [@item]  # Create an array containing only the selected item
+    flash.now[:alert] = flash[:alert] if flash[:alert].present? # Retrieve and display flash message
     render 'index'
   end
 
   def index
-    @order_form = OrderForm.new
     @items = Item.all
+    @item = Item.first # Fetch the first item from your database, or use any other logic to select an item
+    @order_form = OrderForm.new(user: current_user, item: @item)
   end
 
   def create
-    @order_form = OrderForm.new(order_form_params)
-  
+    @item = Item.find(params[:order_form][:item_id]) # Retrieve the item based on the submitted item_id
+    @order_form = OrderForm.new(user: current_user, item: @item)
+
     if @order_form.valid?
-      @item = Item.find(@order_form.item_id)
-  
       ActiveRecord::Base.transaction do
-        # Handle payment
         pay_item
-  
-        # Save order and shipping address
-        save_order_and_shipping_address
-  
-        # Redirect to a success page or show a success message
-        redirect_to root_path, notice: 'Order was successfully created.'
+
+        order = Order.create!(price: @order_form.price, token: @order_form.token, user: current_user, item: @item)
+
+        ShippingAddress.create!(
+          postal_code: @order_form.postal_code,
+          city: @order_form.city,
+          street: @order_form.street,
+          phone_number: @order_form.phone_number,
+          prefecture_id: @order_form.prefecture_id,
+          order: order
+        )
+
+        redirect_to new_orders_with_id_path, notice: 'Order was successfully created.'
       rescue StandardError => e
-        # Handle any errors that might occur during payment or database insertion
+        Rails.logger.error "Failed to create order: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
         flash.now[:alert] = 'There was an error processing your order.'
+        @items = [@item] # Initialize @items with the selected item
         render 'index'
       end
     else
-      @items = []  # Set @items to an empty array
+      flash.now[:alert] = 'Please fill out all required fields correctly.'
+      @items = [@item] # Initialize @items with the selected item
       render 'index'
     end
   end
@@ -42,8 +55,8 @@ class OrdersController < ApplicationController
   private
 
   def order_form_params
-    params.require(:order_form).permit(:price, :token, :postal_code, :building_name, :city, :street, :phone_number,
-                                       :prefecture_id, :item_id)
+    params.require(:order_form).permit(:card_number, :card_exp_month, :card_exp_year, :card_cvc, :postal_code, :prefecture_id,
+                                       :city, :street, :building_name, :phone_number)
   end
 
   def pay_item
