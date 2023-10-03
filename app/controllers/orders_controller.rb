@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
     @item = Item.find(params[:item_id])
     @order_form = OrderForm.new
     @items = [@item]  # Create an array containing only the selected item
-    render 'index'
+    render 'index '
   end
 
   def index
@@ -15,17 +15,17 @@ class OrdersController < ApplicationController
 
   def create
     @order_form = OrderForm.new(order_form_params)
-
+  
     if @order_form.valid?
       @item = Item.find(@order_form.item_id)
+  
       ActiveRecord::Base.transaction do
-
         # Handle payment
         pay_item
-
+  
         # Save order and shipping address
         save_order_and_shipping_address
-
+  
         # Redirect to a success page or show a success message
         redirect_to root_path, notice: 'Order was successfully created.'
       rescue StandardError => e
@@ -34,6 +34,7 @@ class OrdersController < ApplicationController
         render 'index'
       end
     else
+      @items = []  # Set @items to an empty array
       render 'index'
     end
   end
