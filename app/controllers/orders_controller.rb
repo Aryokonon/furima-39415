@@ -5,7 +5,7 @@ class OrdersController < ApplicationController
     @item = Item.find(params[:item_id])
     @order_form = OrderForm.new
     @items = [@item]  # Create an array containing only the selected item
-    render 'index '
+    render 'index'
   end
 
   def index
