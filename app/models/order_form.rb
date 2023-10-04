@@ -11,7 +11,7 @@ class OrderForm
       message: 'は¥300以上、¥9,999,999以下で入力してください'
     }
     validates :user_id, :token, :city, :street, :phone_number, presence: true
-    validates :postal_code, presence: true, format: { with: /\A[0-9]{3}-[0-9]{4}\z/, message: "is invalid. Include hyphen(-)" }
+    validates :postal_code, presence: true, format: { with: /\A[0-9]{3}-[0-9]{4}\z/, message: 'is invalid. Include hyphen(-)' }
   end
 
   validates :prefecture_id, numericality: { other_than: 1, message: "can't be blank" }
