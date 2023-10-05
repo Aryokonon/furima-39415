@@ -33,23 +33,12 @@
         支払金額
       </h1>
       <p class='item-payment-price'>
-        ¥<%= @items.sum(&:price) %> <!-- Calculate total price based on items -->
-      </p>
+        ¥<%= @item.price %> 
     </div>
     <%# /支払額の表示 %>
 
-    <%= form_with model: @order_form, url: orders_with_id_index_path, method: :post, id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
-
-  <% if @order_form.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@order_form.errors.count, 'error') %> prohibited this order from being saved:</h2>
-      <ul>
-        <% @order_form.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+<%= form_with model: @order_form, url: item_orders_path, method: :post, id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
+      <%= render 'shared/error_messages', model: f.object %>
   
         <!-- カード情報の入力 -->
       <div class='credit-card-form'>
@@ -61,7 +50,7 @@
             <label class="form-text">カード情報</label>
             <span class="indispensable">必須</span>
           </div>
-          <%= f.text_field :card_number, class:"input-default", id:"card-number", placeholder:"カード番号(半角16英数字)", maxlength:"16" %>
+    <div id="number-form" class="input-default"></div>
 
           <div class='available-card'>
             <%= image_tag 'card-visa.gif', class: 'card-logo'%>
@@ -76,10 +65,7 @@
             <span class="indispensable">必須</span>
           </div>
           <div class='input-expiration-date-wrap'>
-            <%= f.text_field :card_exp_month, class:"input-expiration-date", id:"card-exp-month", placeholder:"月", maxlength:"2" %>
-            <p>月</p>
-            <%= f.text_field :card_exp_year, class:"input-expiration-date", id:"card-exp-year", placeholder:"年", maxlength:"2" %>
-            <p>年</p>
+    <div id="expiry-form" class="input-default"></div>
           </div>
         </div>
         <div class="form-group">
@@ -87,7 +73,7 @@
             <label class="form-text">セキュリティコード</label>
             <span class="indispensable">必須</span>
           </div>
-          <%= f.text_field :card_cvc, class:"input-default", id:"card-cvc", placeholder:"CVC", maxlength:"3" %>
+    <div id="cvc-form" class="input-default"></div>
         </div>
       </div>
       <!-- /カード情報の入力 -->
