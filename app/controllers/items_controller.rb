@@ -21,22 +21,39 @@ class ItemsController < ApplicationController
     @items = Item.all.order(created_at: :desc)
   end
 
+  def show
+    if @item.sold_out? || current_user == @item.user
+      render 'show'
+    else
+      flash[:alert] = 'You are not authorized to view this item.'
+      redirect_to root_path
+    end
+  end
+
   def edit
-    redirect_to root_path, alert: '他のユーザーの商品は編集できません.' if current_user != @item.user
+    if current_user == @item.user && !@item.sold_out?
+      render 'edit'
+    else
+      redirect_to root_path, alert: '他のユーザーの商品は編集できません.'
+    end
   end
 
   def update
-    if @item.update(item_params)
-      flash[:notice] = 'Item was successfully updated.'
-      redirect_to item_path(@item)  # Use item_path with @item
+    if current_user == @item.user
+      if @item.update(item_params)
+        flash[:notice] = 'Item was successfully updated.'
+        redirect_to item_path(@item)
+      else
+        flash.now[:alert] = 'There was an error updating the item.'
+        render :edit
+      end
     else
-      flash.now[:alert] = 'There was an error updating the item.'
-      render :edit
+      redirect_to root_path, alert: '他のユーザーの商品は編集できません.'
     end
   end
 
   def destroy
-    if @item.user == current_user
+    if current_user == @item.user
       @item.destroy
       flash[:notice] = 'Item was successfully deleted.'
     else
@@ -44,10 +61,6 @@ class ItemsController < ApplicationController
     end
 
     redirect_to root_path
-  end
-
-  def show
-    @item = find_item
   end
 
   private
