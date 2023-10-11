@@ -8,7 +8,6 @@
     
 
     <% if @item %>
-      <%# If @item exists, display item details %>
       <div class='buy-item-info'>
         <%= image_tag @item.image, class: 'buy-item-img' %>
         <div class='buy-item-right-content'>
@@ -22,7 +21,6 @@
         </div>
       </div>
     <% else %>
-      <%# Handle the case where @item is nil, e.g., display an error message or redirect %>
       <p>No item found with the specified ID</p>
     <% end %>
 

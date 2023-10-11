@@ -37,8 +37,6 @@
   <%= link_to '削除', item_path(@item), method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
 <% elsif !@item.sold_out? %>
   <%= link_to "購入画面に進む",  item_orders_path(item_id: @item.id), class: "item-red-btn" %>
-<%# <% else %>
-  <%# <%= link_to "購入画面に進む",  item_orders_path(item_id: @item.id), class: "item-red-btn" %> 
 <% end %>
 
       <div class="item-explain-box">

@@ -22,14 +22,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
-
-    if current_user == @item.user
-      render 'show'
-    elsif @item.sold_out?
-      flash[:alert] = 'This item has already been sold.'
-      render 'show'
-    end
   end
 
   def edit

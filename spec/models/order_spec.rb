@@ -20,6 +20,11 @@ RSpec.describe Order, type: :model do
       expect(@order.errors.full_messages).to include("Token can't be blank")
     end
 
+    it '建物名が入力されていなくても購入できること' do
+      @order.building_name = nil
+      expect(@order).to be_valid
+    end
+
     it '市区町村が必要であること' do
       @order.city = nil
       @order.valid?
@@ -72,6 +77,36 @@ RSpec.describe Order, type: :model do
       @order.prefecture_id = 1
       @order.valid?
       expect(@order.errors.full_messages).to include("Prefecture can't be blank")
+    end
+
+    it '10桁未満の場合は無効であること' do
+      @order.phone_number = '123456789'
+      @order.valid?
+      expect(@order.errors.full_messages).to include('Phone number should be 10 to 11 digits')
+    end
+
+    it '11桁を超える場合は無効であること' do
+      @order.phone_number = '123456789012'
+      @order.valid?
+      expect(@order.errors.full_messages).to include('Phone number should be 10 to 11 digits')
+    end
+
+    it '半角数字以外が含まれている場合は無効であること' do
+      @order.phone_number = 'abcdefghij'
+      @order.valid?
+      expect(@order.errors.full_messages).to include('Phone number should be 10 to 11 digits')
+    end
+
+    it 'userが紐づいていない場合は無効であること' do
+      @order.user_id = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("User can't be blank")
+    end
+
+    it 'itemが紐づいていない場合は無効であること' do
+      @order.item_id = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Item can't be blank")
     end
   end
 end
