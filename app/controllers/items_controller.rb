@@ -22,11 +22,13 @@ class ItemsController < ApplicationController
   end
 
   def show
-    if @item.sold_out? || current_user == @item.user
+    @item = Item.find(params[:id])
+
+    if current_user == @item.user
       render 'show'
-    else
-      flash[:alert] = 'You are not authorized to view this item.'
-      redirect_to root_path
+    elsif @item.sold_out?
+      flash[:alert] = 'This item has already been sold.'
+      render 'show'
     end
   end
 

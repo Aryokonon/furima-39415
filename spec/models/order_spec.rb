@@ -4,7 +4,7 @@ RSpec.describe Order, type: :model do
   before do
     @user = FactoryBot.create(:user)
     @item = FactoryBot.create(:item, user: @user)
-    @order = FactoryBot.build(:order, user: @user, item: @item)
+    @order = FactoryBot.build(:order_form, user_id: @user.id, item_id: @item.id)
   end
 
   context '注文が有効な場合' do
@@ -14,28 +14,64 @@ RSpec.describe Order, type: :model do
   end
 
   context '注文が無効な場合' do
-    it '価格がない場合は無効であること' do
-      @order.price = nil
-      @order.valid?
-      expect(@order.errors.full_messages).to include('Priceは空白にできません')
-    end
-
     it 'トークンがない場合は無効であること' do
       @order.token = nil
       @order.valid?
-      expect(@order.errors.full_messages).to include('Tokenは空白にできません')
+      expect(@order.errors.full_messages).to include("Token can't be blank")
     end
-  end
 
-  it 'ユーザーに所属する' do
-    expect(@order).to belong_to(:user)
-  end
+    it '市区町村が必要であること' do
+      @order.city = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("City can't be blank")
+    end
 
-  it '商品に所属する' do
-    expect(@order).to belong_to(:item)
-  end
+    it '建物名が必要であること' do
+      @order.building_name = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Building name can't be blank")
+    end
 
-  it '配送先が1つある' do
-    expect(@order).to have_one(:shipping_address)
+    it '番地が必要であること' do
+      @order.street = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Street can't be blank")
+    end
+
+    it '郵便番号が必要であること' do
+      @order.postal_code = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Postal code can't be blank")
+    end
+
+    it '郵便番号のフォーマットが正しいこと' do
+      @order.postal_code = '1234'
+      @order.valid?
+      expect(@order.errors.full_messages).to include('Postal code is invalid. Include hyphen(-)')
+    end
+
+    it '電話番号が必要であること' do
+      @order.phone_number = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Phone number can't be blank")
+    end
+
+    it '電話番号のフォーマットが正しいこと' do
+      @order.phone_number = '123'
+      @order.valid?
+      expect(@order.errors.full_messages).to include('Phone number should be 10 to 11 digits')
+    end
+
+    it '都道府県が必要であること' do
+      @order.prefecture_id = nil
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Prefecture can't be blank")
+    end
+
+    it '都道府県が1以外であること' do
+      @order.prefecture_id = 1
+      @order.valid?
+      expect(@order.errors.full_messages).to include("Prefecture can't be blank")
+    end
   end
 end

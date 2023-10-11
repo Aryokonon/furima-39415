@@ -1,6 +1,10 @@
 class OrderForm
   include ActiveModel::Model
 
+  def item
+    Item.find(item_id)
+  end
+
   attr_accessor :token, :postal_code, :city, :street, :phone_number, :prefecture_id, :building_name, :user_id, :item_id
 
   with_options presence: true do
