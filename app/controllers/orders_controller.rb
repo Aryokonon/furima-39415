@@ -11,8 +11,8 @@ class OrdersController < ApplicationController
     end
 
     # Check if the item belongs to the current user, and if so, redirect to root
-    if @item.user == current_user
-      redirect_to root_path, alert: "You cannot purchase your own item."
+    if @item.user == current_user || @item.sold_out?
+      redirect_to root_path, alert: "You cannot purchase this item."
     end
   end
 
