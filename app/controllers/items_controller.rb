@@ -33,10 +33,14 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    if current_user == @item.user && !@item.sold_out?
-      render 'edit'
+    if current_user == @item.user
+      if @item.sold_out?
+        redirect_to root_path, alert: '売却済みの商品は編集できません。'
+      else
+        render 'edit'
+      end
     else
-      redirect_to root_path, alert: '他のユーザーの商品は編集できません.'
+      redirect_to root_path, alert: '他のユーザーの商品は編集できません。'
     end
   end
 

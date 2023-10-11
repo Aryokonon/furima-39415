@@ -4,6 +4,16 @@ class OrdersController < ApplicationController
   def index
     @order_form = OrderForm.new
     @item = Item.find_by(id: params[:item_id])
+
+    # Check if the user is not logged in, and if so, redirect to the login page
+    unless user_signed_in?
+      redirect_to new_user_session_path, alert: "You must be logged in to purchase items."
+    end
+
+    # Check if the item belongs to the current user, and if so, redirect to root
+    if @item.user == current_user
+      redirect_to root_path, alert: "You cannot purchase your own item."
+    end
   end
 
   def create
