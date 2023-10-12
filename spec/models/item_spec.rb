@@ -97,16 +97,15 @@ RSpec.describe Item, type: :model do
   end
 end
 
-# describe '#売り切れ?' do
-#  let(:order) { FactoryBot.create(:order, item: @item) }
+describe '#売り切れ?' do
+  let(:order) { FactoryBot.create(:order, item: @item) }
 
-#  it 'アイテムが売り切れの場合、trueを返すこと' do
-#    expect(@item.sold_out?).to eq true
-#  end
+  it 'アイテムが売り切れの場合、trueを返すこと' do
+    expect(@item.sold_out?).to eq true
+  end
 
-#  it 'アイテムが売り切れでない場合、falseを返すこと' do
-#    @item.order = nil
-#    expect(@item.sold_out?).to eq true
-#  end
-#  end
-#  end
+  it 'アイテムが売り切れでない場合、falseを返すこと' do
+    @item.order = nil
+    expect(@item.sold_out?).to eq true
+  end
+end

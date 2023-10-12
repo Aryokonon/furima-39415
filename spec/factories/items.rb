@@ -9,5 +9,6 @@ FactoryBot.define do
     prefecture_id { 2 } # Uncomment and replace with the appropriate prefecture ID
     shipping_day_id { 2 } # Uncomment and replace with the appropriate shipping day ID
     price { 1000 } # You can set the price here
+    image { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'support', 'example.jpg'), 'image/jpeg') }
   end
 end

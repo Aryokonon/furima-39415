@@ -1,5 +1,6 @@
 <%= render "shared/header" %>
 <div class='main'>
+
   <!-- 画面上部の「人生を変えるフリマアプリ」帯部分 -->
   <div class='title-contents'>
     <h2 class='service-title'>
@@ -126,6 +127,7 @@
       新規投稿商品
     </div>
     <ul class='item-lists'>
+
       <!-- Check if @items is not empty -->
       <% if @items.present? %>
         <% @items.each do |item| %>
@@ -139,11 +141,11 @@
                   <%= image_tag "item-sample.png", class: "item-img" %>
                 <% end %>
 
-  <%# <% if item.sold_out? %>
-        <%# <div class='sold-out'> %>
-              <%# <span>Sold Out!!</span> %>
-          <%# </div> %>
-  <%# <% end %>
+<% if item.sold_out? %>
+    <div class='sold-out'>
+        <span>Sold Out!!</span>
+    </div>
+<% end %>
 
               </div>
               <!-- Display item name, price, and delivery fee -->
