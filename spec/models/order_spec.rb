@@ -4,11 +4,17 @@ RSpec.describe Order, type: :model do
   before do
     @user = FactoryBot.create(:user)
     @item = FactoryBot.create(:item, user: @user)
-    @order = FactoryBot.build(:order_form, user_id: @user.id, item_id: @item.id)
+    @order_form = FactoryBot.build(:order_form, user: @user, item: @item)
+    @order = @order_form.build_order # Create an Order instance from the OrderForm
   end
 
   context '注文が有効な場合' do
     it '正しい属性を持つ場合は有効であること' do
+      expect(@order).to be_valid
+    end
+
+    it '建物名が入力されていなくても購入できること' do
+      @order.building_name = nil
       expect(@order).to be_valid
     end
   end
@@ -20,21 +26,10 @@ RSpec.describe Order, type: :model do
       expect(@order.errors.full_messages).to include("Token can't be blank")
     end
 
-    it '建物名が入力されていなくても購入できること' do
-      @order.building_name = nil
-      expect(@order).to be_valid
-    end
-
     it '市区町村が必要であること' do
       @order.city = nil
       @order.valid?
       expect(@order.errors.full_messages).to include("City can't be blank")
-    end
-
-    it '建物名が必要であること' do
-      @order.building_name = nil
-      @order.valid?
-      expect(@order.errors.full_messages).to include("Building name can't be blank")
     end
 
     it '番地が必要であること' do

@@ -1,9 +1,9 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_item, only: [:index, :create]
 
   def index
     @order_form = OrderForm.new
-    @item = Item.find_by(id: params[:item_id])
 
     # Check if the item belongs to the current user or if the item is sold out
     return unless @item.user == current_user || @item.sold_out?
@@ -12,7 +12,6 @@ class OrdersController < ApplicationController
   end
 
   def create
-    @item = Item.find_by(id: params[:item_id])
     @order_form = OrderForm.new(order_form_params)
 
     if @order_form.valid?
@@ -23,7 +22,6 @@ class OrdersController < ApplicationController
 
       redirect_to root_path, notice: 'Order created successfully.'
     else
-      @item = Item.find_by(id: params[:item_id]) # Re-fetch the item
       render :index
     end
   end
@@ -48,5 +46,9 @@ class OrdersController < ApplicationController
       card: order_form_params[:token],
       currency: 'jpy'
     )
+  end
+
+  def set_item
+    @item = Item.find_by(id: params[:item_id])
   end
 end

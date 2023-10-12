@@ -16,12 +16,11 @@
         <% end %>
       </div>
 
-<% if @item.sold_out? %>
-  <div class='sold-out'>
-    <span>Sold Out!!</span>
-  </div>
-<% end %>
-
+ <% if @item.sold_out? %>
+      <div class='sold-out'>
+        <span>Sold Out!!</span>
+      </div>
+    <% else %>
       <div class="item-price-box">
         <span class="item-price">
           ¥ <%= number_to_currency(@item.price, unit: '') %>
@@ -31,13 +30,14 @@
         </span>
       </div>
 
-<% if user_signed_in? && @item.user == current_user %>
-  <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
-  <p class="or-text">or</p>
-  <%= link_to '削除', item_path(@item), method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
-<% elsif !@item.sold_out? %>
-  <%= link_to "購入画面に進む",  item_orders_path(item_id: @item.id), class: "item-red-btn" %>
-<% end %>
+  <% if user_signed_in? && @item.user == current_user %>
+        <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
+        <p class="or-text">or</p>
+        <%= link_to '削除', item_path(@item), method: :delete, data: { confirm: 'Are you sure?' }, class: "item-destroy" %>
+      <% elsif !@item.sold_out? %>
+        <%= link_to "購入画面に進む",  item_orders_path(item_id: @item.id), class: "item-red-btn" %>
+      <% end %>
+    <% end %>
 
       <div class="item-explain-box">
         <span><%= @item.description %></span>
