@@ -23,12 +23,6 @@
       </div>
       <%# /商品画像 %>
 
-      <% if @item.errors[:image].any? %>
-        <div class="validation-error">
-          <%= @item.errors.full_messages_for(:image).join(", ") %>
-        </div>
-      <% end %>
-
       <%# 商品名と商品説明 %>
       <div class="new-items">
         <div class="weight-bold-text">
@@ -121,23 +115,26 @@
       </div>
 
       <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const priceInput = document.getElementById('item-price');
-          const addTaxPrice = document.getElementById('add-tax-price');
-          const profit = document.getElementById('profit');
+      document.addEventListener('DOMContentLoaded', () => {
+  const priceInput = document.getElementById('item-price');
+  const addTaxPrice = document.getElementById('add-tax-price');
+  const profit = document.getElementById('profit');
 
-          priceInput.addEventListener('input', () => {
-            const inputValue = priceInput.value;
+  priceInput.addEventListener('input', () => {
+    const inputValue = Number(priceInput.value); // Explicit conversion to Number
+    
+    if (inputValue >= 300 && inputValue <= 9999999) {
+      const tax = Math.floor(inputValue * 0.1); // 10% fee
+      const earnings = inputValue - tax; // Adjusted Profit
+      addTaxPrice.textContent = tax;
+      profit.textContent = earnings;
+    } else {
+      addTaxPrice.textContent = '---';
+      profit.textContent = '---';
+    }
+  });
+});
 
-            if (inputValue >= 300 && inputValue <= 9999999) {
-              addTaxPrice.textContent = Math.floor(inputValue * 0.1); // 10% fee
-              profit.textContent = Math.floor(inputValue * 0.9); // 90% profit
-            } else {
-              addTaxPrice.textContent = '---';
-              profit.textContent = '---';
-            }
-          });
-        });
       </script>
 
       <%# 注意書き %>

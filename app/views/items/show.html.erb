@@ -14,23 +14,27 @@
         <% else %>
           <%= image_tag "placeholder_image.png", class: "item-box-img" %>
         <% end %>
-      </div>
+</div>
 
- <% if @item.sold_out? %>
-      <div class='sold-out'>
-        <span>Sold Out!!</span>
-      </div>
+         <% if @item.sold_out? %>
+          <div class='sold-out'>
+            <span>Sold Out!!</span>
+          </div>
+                </div>
+
     <% else %>
+
       <div class="item-price-box">
         <span class="item-price">
-          ¥ <%= number_to_currency(@item.price, unit: '') %>
+          <%= number_to_currency(@item.price, unit: '', precision: 0) %>        
         </span>
         <span class="item-postage">
           <%= @item.delivery_fee.name %>
         </span>
       </div>
+    <% end %>
 
-   <% if user_signed_in? %>
+      <% if user_signed_in? %>
         <% if @item.user == current_user %>
           <%= link_to "商品の編集", edit_item_path(@item), method: :get, class: "item-red-btn" %>
           <p class="or-text">or</p>
@@ -39,7 +43,7 @@
           <%= link_to "購入画面に進む", item_orders_path(item_id: @item.id), class: "item-red-btn" %>
         <% end %>
       <% end %>
-    <% end %>
+
 
       <div class="item-explain-box">
         <span><%= @item.description %></span>
