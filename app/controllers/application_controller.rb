@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   #  before_action :configure_sign_up_params, only: [:create]
-  #  before_action :basic_auth
+  before_action :basic_auth
 
   def new
   end

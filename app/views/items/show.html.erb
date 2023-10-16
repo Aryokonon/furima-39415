@@ -14,15 +14,17 @@
         <% else %>
           <%= image_tag "placeholder_image.png", class: "item-box-img" %>
         <% end %>
-</div>
 
-         <% if @item.sold_out? %>
+                 <% if @item.sold_out? %>
           <div class='sold-out'>
             <span>Sold Out!!</span>
           </div>
-                </div>
+          
+</div>
+
 
     <% else %>
+                </div>
 
       <div class="item-price-box">
         <span class="item-price">
@@ -48,6 +50,7 @@
       <div class="item-explain-box">
         <span><%= @item.description %></span>
       </div>
+      
       <table class="detail-table">
         <tbody>
           <tr>
