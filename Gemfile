@@ -36,6 +36,11 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'shoulda-matchers'  # for handy matchers
   gem 'faker'  # to generate random data for your factories
+  gem 'capistrano'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rails'
+  gem 'capistrano3-unicorn'
 end
 
 group :development do
